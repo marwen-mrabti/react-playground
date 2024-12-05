@@ -1,0 +1,254 @@
+@import "tailwindcss";
+
+/* Base Layer - for defaults, resets, and theme variables */
+@layer base {
+  /* Reset Defaults */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+  }
+
+  /* Document Body */
+  body {
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Media Elements */
+  img,
+  picture,
+  video,
+  canvas,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  /* Form Elements */
+  input,
+  button,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  /* Typography */
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    overflow-wrap: break-word;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    text-wrap: balance;
+  }
+
+  /* Root Elements */
+  #root,
+  #__next {
+    isolation: isolate;
+  }
+
+  /* Theme Variables */
+  :root {
+    --background: var(--color-slate-50);
+    --background-secondary: var(--color-slate-200);
+    --background-highlight: #25dd44;
+
+    --foreground: var(--color-slate-950);
+    --foreground-secondary: var(--color-slate-900);
+    --primary: var(--color-indigo-500);
+  }
+
+  .dark {
+    --background: var(--color-slate-950);
+    --background-secondary: var(--color-slate-900);
+    --background-highlight: #0051ff;
+
+    --foreground: var(--color-slate-50);
+    --foreground-secondary: var(--color-slate-100);
+    --primary: var(--color-indigo-500);
+  }
+
+  .orange {
+    --background: var(--color-orange-50);
+    --background-secondary: var(--color-orange-200);
+    --background-highlight: #ff8000;
+    --foreground: var(--color-orange-950);
+    --foreground-secondary: var(--color-orange-900);
+    --primary: var(--color-orange-500);
+  }
+
+  /* Citrus  data Theme */
+  [data-theme="citrus"] {
+    --color-background-highlight: #f1f15c;
+    --color-background-accent: #dd5c06;
+  }
+
+  [data-theme="citrus"].dark {
+    --color-background-highlight: #b1b1034f;
+    --color-background-accent: #ffb366;
+  }
+
+  [data-theme="citrus"].orange {
+    --color-background-highlight: #8d653c;
+    --color-background-accent: #cfbf2f;
+  }
+}
+
+/* Theme Configuration */
+@variant light (&:where(.light, .light *));
+@variant dark (&:where(.dark, .dark *));
+@variant orange (&:where(.orange, .orange *));
+
+@theme {
+  --color-background: var(--background);
+  --color-background-secondary: var(--background-secondary);
+  --color-background-highlight: var(--background-highlight);
+  --color-background-accent: var(--background-accent);
+
+  --color-foreground: var(--foreground);
+  --color-foreground-secondary: var(--foreground-secondary);
+  --color-primary: var(--primary);
+}
+
+/* Global Keyframes */
+@keyframes auto-run {
+  from {
+    transform: perspective(1000px) rotateX(-16deg) rotateY(0deg);
+  }
+  to {
+    transform: perspective(1000px) rotateX(-16deg) rotateY(360deg);
+  }
+}
+
+@keyframes moon-bg {
+  from {
+    background-color: hsl(0, 0%, 100%);
+    filter: drop-shadow(0 0 20px hsl(48, 9%, 22%));
+  }
+  to {
+    background-color: hsl(0, 0%, 0%);
+    filter: drop-shadow(0 0 20px hsl(50, 9%, 87%));
+  }
+}
+
+@keyframes auto-scroll {
+  0% {
+    left: 100%;
+  }
+  100% {
+    left: calc(var(--width) * -1);
+  }
+}
+
+@keyframes scrolling {
+  from {
+    opacity: 0;
+    transform: rotateX(0deg) translateZ(-100px) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: rotateX(-30deg) translateZ(0px) scale(1);
+  }
+}
+
+/* Components Layer - for complex, reusable UI patterns */
+@layer components {
+  /* Range Input Component */
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+
+    &::-webkit-slider-runnable-track {
+      height: 4px;
+      background: var(--color-orange-200);
+      border-radius: 2px;
+    }
+
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      background: var(--color-orange-500);
+      border-radius: 50%;
+      margin-top: -6px;
+    }
+  }
+
+  /* Slider Component */
+  .slider {
+    transform: perspective(1000px);
+    animation: auto-run 20s linear infinite forwards;
+
+    .item {
+      transform: rotateY(
+          calc(((var(--position) - 1) * (360 / var(--quantity)) * 1deg))
+        )
+        translateZ(350px);
+    }
+  }
+
+  /* Moon Component */
+  .moon {
+    animation: moon-bg 10s linear 0.1s infinite alternate;
+
+    &:hover {
+      animation-play-state: paused;
+    }
+  }
+
+  /* Scroll Container Component */
+  .scroll-container {
+    &:hover .scroll-item {
+      animation-play-state: paused;
+      filter: grayscale(0.9);
+      transition: filter 0.3s ease-in-out;
+    }
+
+    .scroll-item {
+      --animation-time: calc(var(--quantity) * 1s);
+      animation: auto-scroll var(--animation-time) linear
+        calc(var(--index) * 1s * -1) infinite var(--direction, forwards);
+    }
+  }
+}
+
+/* Utilities Layer - for single-purpose utility classes */
+@layer utilities {
+  .transform-perspective {
+    transform: perspective(1000px);
+  }
+
+  .mask-image {
+    mask-image: linear-gradient(
+      to right,
+      hsl(0 0% 0% / 0),
+      hsl(0 0% 0% / 1) 30%,
+      hsl(0 0% 0% / 1) 70%,
+      hsl(0 0% 0% / 0)
+    );
+  }
+
+  .animate-scrolling {
+    animation: scrolling linear;
+    animation-timeline: view();
+    animation-range: entry 0% contain 50%;
+  }
+}
