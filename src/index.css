@@ -78,7 +78,7 @@
   .dark {
     --background: var(--color-slate-950);
     --background-secondary: var(--color-slate-900);
-    --background-highlight: #0051ff;
+    --background-highlight: #02143b;
 
     --foreground: var(--color-slate-50);
     --foreground-secondary: var(--color-slate-100);
@@ -250,5 +250,27 @@
     animation: scrolling linear;
     animation-timeline: view();
     animation-range: entry 0% contain 50%;
+  }
+
+  .bg-grid {
+    background:
+      linear-gradient(
+        to bottom right,
+        transparent,
+        var(--color-background-secondary) 90%
+      ),
+      fixed
+        repeating-linear-gradient(
+          to right,
+          var(--color-background-secondary) 0px 1px,
+          transparent 1px 20px
+        ),
+      fixed
+        repeating-linear-gradient(
+          to bottom,
+          var(--color-background-secondary) 0px 1px,
+          transparent 1px 20px
+        )
+        var(--color-background);
   }
 }
