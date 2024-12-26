@@ -5,7 +5,7 @@ const ThemeToggle = () => {
   const { theme, setTheme } = useTheme();
 
   return (
-    <div className="w-[200px]">
+    <div className="w-[200px] ">
       <Select
         options={["light", "dark", "orange"]}
         value={theme}

@@ -82,7 +82,7 @@
 
     --foreground: var(--color-slate-50);
     --foreground-secondary: var(--color-slate-100);
-    --primary: var(--color-indigo-500);
+    --primary: var(--color-orange-500);
   }
 
   .orange {
@@ -125,9 +125,23 @@
   --color-foreground: var(--foreground);
   --color-foreground-secondary: var(--foreground-secondary);
   --color-primary: var(--primary);
+
+  /* animations */
+  --animate-moon: moon-bg 10s linear 0.1s infinite alternate;
+  --animate-hue: hue-rotate 5s linear 0.1s infinite backwards reverse;
 }
 
 /* Global Keyframes */
+
+@keyframes hue-rotate {
+  from {
+    filter: hue-rotate(0deg);
+  }
+  to {
+    filter: hue-rotate(360deg);
+  }
+}
+
 @keyframes auto-run {
   from {
     transform: perspective(1000px) rotateX(-16deg) rotateY(0deg);
@@ -171,7 +185,7 @@
 /* Components Layer - for complex, reusable UI patterns */
 @layer components {
   /* Range Input Component */
-  input[type="range"] {
+  /* input[type="range"] {
     -webkit-appearance: none;
     appearance: none;
     background: transparent;
@@ -190,9 +204,9 @@
       border-radius: 50%;
       margin-top: -6px;
     }
-  }
+  } */
 
-  /* Slider Component */
+  /* marquee animation */
   .slider {
     transform: perspective(1000px);
     animation: auto-run 20s linear infinite forwards;
@@ -204,24 +218,12 @@
         translateZ(350px);
     }
   }
-
-  /* Moon Component */
-  .moon {
-    animation: moon-bg 10s linear 0.1s infinite alternate;
-
-    &:hover {
-      animation-play-state: paused;
-    }
-  }
-
-  /* Scroll Container Component */
   .scroll-container {
     &:hover .scroll-item {
       animation-play-state: paused;
       filter: grayscale(0.9);
       transition: filter 0.3s ease-in-out;
     }
-
     .scroll-item {
       --animation-time: calc(var(--quantity) * 1s);
       animation: auto-scroll var(--animation-time) linear
@@ -244,6 +246,11 @@
       hsl(0 0% 0% / 1) 70%,
       hsl(0 0% 0% / 0)
     );
+  }
+
+  .backdrop-mask {
+    mask-image: linear-gradient(to bottom, black 0% 85%, transparent 85% 100%);
+    pointer-events: none;
   }
 
   .animate-scrolling {

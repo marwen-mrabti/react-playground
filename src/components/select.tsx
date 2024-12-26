@@ -39,7 +39,7 @@ export default function Select<T extends string>({
           onChange={(e) => handler(e.target.value as T)}
           disabled={disabled}
           className={cn(
-            "h-10 w-full appearance-none rounded-md border border-gray-200 bg-white px-3 py-2 pr-8 text-sm",
+            "h-10 w-full cursor-pointer appearance-none rounded-md border border-gray-200 bg-white px-3 py-2 pr-8 text-sm",
             "placeholder:text-gray-500 focus:ring-2 focus:ring-gray-950 focus:outline-none",
             "disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-800 dark:bg-gray-950",
             "dark:text-gray-50 dark:focus:ring-gray-300",

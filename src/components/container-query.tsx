@@ -22,10 +22,10 @@ export default function ContainerQuery() {
   }, [containerWidth]);
 
   return (
-    <div data-theme="citrus" className={cn("w-full", theme)}>
+    <div data-theme="citrus" className={cn("isolate w-full", theme)}>
       <section
         id="container-query"
-        className="bg-background-highlight rounded-2xl container mx-auto flex min-h-dvh w-full flex-col items-center justify-start gap-8 px-4 py-10"
+        className="bg-background-highlight container mx-auto flex min-h-dvh w-full flex-col items-center justify-start gap-8 rounded-2xl px-4 py-10"
       >
         <h1 className="text-primary text-center text-4xl font-bold">
           Container Query

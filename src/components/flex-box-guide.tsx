@@ -38,7 +38,7 @@ export default function FlexBoxGuide() {
   return (
     <section
       id="flex-box-guide"
-      className="container flex min-h-dvh w-full flex-col items-center justify-center gap-10 rounded-2xl bg-linear-45/oklch from-slate-700 to-slate-900 px-4 py-4"
+      className="isolate container flex min-h-dvh w-full flex-col items-center justify-center gap-10 rounded-2xl bg-linear-45/oklch from-slate-700 to-slate-900 px-4 py-4"
       style={
         { "--container-width": `${containerWidth}%` } as React.CSSProperties
       }

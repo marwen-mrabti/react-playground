@@ -1,14 +1,16 @@
 import { cn } from "@/lib/utils";
+import { DndContext, DragEndEvent, useDroppable } from "@dnd-kit/core";
 import {
-  DndContext,
-  DragEndEvent,
-  useDraggable,
-  useDroppable,
-} from "@dnd-kit/core";
+  arrayMove,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { useState } from "react";
 
 type T_columns = {
-  id: "TODO" | "IN_PROGRESS" | "DONE";
+  id: T_tasks["status"];
   title: string;
 };
 
@@ -61,27 +63,67 @@ export default function Draggable() {
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { over, active } = event;
+    if (!over) return;
 
-    if (over && over.id !== active.id) {
-      const activeTask = tasks.find((task) => task.id === active.id);
-      const activeColumn = columns.find((column) => column.id === over.id);
-      if (activeTask?.status !== activeColumn?.id) {
+    const taskId = active.id as string;
+    const overId = over.id as string;
+
+    // Find the tasks that are being dragged and dropped
+    const activeTask = active.data.current?.task;
+    const overTask = tasks.find((task) => task.id === overId);
+
+    if (!activeTask) return;
+
+    // If dropping over a column
+    if (columns.find((col) => col.id === overId)) {
+      const newStatus = overId as T_tasks["status"];
+      if (activeTask.status !== newStatus) {
         const newTasks = tasks.map((task) => {
-          if (task.id === active.id) {
-            return { ...task, status: activeColumn?.id ?? "TODO" };
+          if (task.id === taskId) {
+            return { ...task, status: newStatus };
           }
           return task;
         });
-        setTasks(newTasks);
-        localStorage.setItem("tasks", JSON.stringify(newTasks));
+        updateTasks(newTasks);
       }
+      return;
+    }
+
+    // If dropping over another task
+    if (overTask) {
+      const activeIndex = tasks.findIndex((t) => t.id === taskId);
+      const overIndex = tasks.findIndex((t) => t.id === overId);
+
+      // If tasks are in the same column, reorder them
+      if (activeTask.status === overTask.status) {
+        const newTasks = arrayMove(tasks, activeIndex, overIndex);
+        updateTasks(newTasks);
+      } else {
+        // If tasks are in different columns, move to new column
+        const newTasks = tasks.map((task) => {
+          if (task.id === taskId) {
+            return { ...task, status: overTask.status };
+          }
+          return task;
+        });
+        updateTasks(newTasks);
+      }
+    }
+  };
+
+  const updateTasks = (newTasks: T_tasks[]) => {
+    setTasks(newTasks);
+    try {
+      localStorage.setItem("tasks", JSON.stringify(newTasks));
+    } catch (error) {
+      console.error("Failed to save tasks to localStorage:", error);
     }
   };
 
   return (
     <section
       id="draggable"
-      className="bg-grid container flex min-h-dvh w-full flex-col items-center justify-start gap-4 rounded-2xl px-4 py-10"
+      className="bg-grid isolate container flex min-h-dvh w-full flex-col items-center justify-start gap-4 rounded-2xl px-4 py-10"
     >
       <h1 className="text-center text-4xl font-bold">Draggable</h1>
 
@@ -110,40 +152,62 @@ function Column({ id, title, tasks }: T_columns & { tasks: T_tasks[] }) {
     <li
       ref={setNodeRef}
       className={cn(
-        "bg-background-secondary/50 min-h-dvh shrink-0 grow basis-[200px] rounded-2xl px-2 py-4 shadow-lg shadow-zinc-700",
+        "bg-background-secondary/50 min-h-dvh shrink-0 grow basis-[200px] rounded-2xl px-2 py-4 shadow-md shadow-zinc-700",
         "flex flex-col items-center justify-start gap-2 border-2 border-transparent",
-        "transition-all duration-300 ease-in-out",
-        { "border-violet-500": isOver },
+        "transition-all duration-200 ease-in-out",
+        { "border-primary": isOver },
       )}
     >
-      <h2 className="text-2xl font-bold">{title}</h2>
-
+      <h2 className="text-primary text-2xl font-bold">{title}</h2>
       <ul className="grid w-full place-items-center gap-4">
-        {tasks.map((task) => (
-          <TaskCard key={task.id} task={task} />
-        ))}
+        <SortableContext
+          items={tasks.map((t) => t.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          {tasks.map((task) => (
+            <TaskCard key={task.id} task={task} />
+          ))}
+        </SortableContext>
       </ul>
     </li>
   );
 }
 
 function TaskCard({ task }: { task: T_tasks }) {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
     id: task.id,
+    data: {
+      type: "task",
+      task,
+    },
   });
-  const style = transform
-    ? {
-        transform: `translate(${transform.x}px, ${transform.y}px)`,
-      }
-    : undefined;
+
+  const style = {
+    transition,
+    transform: CSS.Transform.toString(transform),
+  };
 
   return (
     <li
       ref={setNodeRef}
       {...listeners}
       {...attributes}
-      draggable
-      className="bg-background-highlight/80 w-full cursor-grabbing rounded-lg p-2 shadow-lg shadow-slate-800"
+      draggable={true}
+      className={cn(
+        "bg-background-highlight/80 w-full cursor-grabbing rounded-lg p-2 shadow-sm shadow-slate-800",
+        "hover:bg-background-highlight transition-colors duration-75 ease-linear",
+        "transform transition-transform duration-10 ease-out",
+        {
+          "opacity-50": isDragging,
+        },
+      )}
       style={style}
     >
       <h1 className="text-2xl font-bold">{task.title}</h1>

@@ -1,19 +1,22 @@
 import reactLogo from "./assets/react.svg";
 
+import CircularMenu from "@/components/circular-menu";
+import ContainerQuery from "@/components/container-query";
+import Draggable from "@/components/draggable";
+import FilterAnimations from "@/components/filter-animations";
+import FlexBoxGuide from "@/components/flex-box-guide";
+import InfiniteHorizontalScroll from "@/components/infinite-horizontal-scroll";
+import MasonryLayout from "@/components/masonry-layout";
 import MoonLight from "@/components/moon-light";
+import ObserverApi from "@/components/observer-api";
 import ScrollAnimation from "@/components/scroll-animation";
-import { Fragment } from "react/jsx-runtime";
-import ContainerQuery from "./components/container-query";
-import Draggable from "./components/draggable";
-import FlexBoxGuide from "./components/flex-box-guide";
-import InfiniteHorizontalScroll from "./components/infinite-horizontal-scroll";
-import MasonryLayout from "./components/masonry-layout";
-import ThemeToggle from "./components/theme-toggle";
-import ThreeDSlider from "./components/three-D-Slider";
+import ThemeToggle from "@/components/theme-toggle";
+import ThreeDSlider from "@/components/three-D-Slider";
+import GridGuide from "@/components/grid-guide";
 
 function App() {
   return (
-    <Fragment>
+    <div suppressHydrationWarning={true}>
       <>
         <title>react playground</title>
         <meta name="author" content="marwen" />
@@ -25,11 +28,16 @@ function App() {
           }
         />
       </>
-      <main className="text-foreground bg-background relative flex min-h-dvh max-w-screen flex-col items-center justify-start gap-4 px-4 py-4">
-        <div className="sticky top-4 left-0 z-100 flex w-full items-center justify-center gap-4 border-b-2 border-slate-400 bg-amber-100/20 py-4 backdrop-blur-3xl">
-          <img src={reactLogo} alt="React logo" />
-          <ThemeToggle />
-        </div>
+
+      <main className="text-foreground bg-background relative flex min-h-dvh max-w-screen flex-col items-center justify-start gap-8">
+        <header className="sticky top-0 left-0 z-100 w-full">
+          <nav className="bg-background w-full py-6 opacity-75 drop-shadow-lg backdrop-blur-3xl">
+            <div className="flex items-center justify-around">
+              <img src={reactLogo} alt="React logo" />
+              <ThemeToggle />
+            </div>
+          </nav>
+        </header>
 
         <ScrollAnimation />
 
@@ -53,8 +61,20 @@ function App() {
 
         <hr className="my-4 w-full text-slate-300 dark:text-slate-800" />
         <Draggable />
+
+        <hr className="my-4 w-full text-slate-300 dark:text-slate-800" />
+        <FilterAnimations />
+
+        <hr className="my-4 w-full text-slate-300 dark:text-slate-800" />
+        <CircularMenu />
+
+        <hr className="my-4 w-full text-slate-300 dark:text-slate-800" />
+        <ObserverApi />
+
+        <hr className="my-4 w-full text-slate-300 dark:text-slate-800" />
+        <GridGuide />
       </main>
-    </Fragment>
+    </div>
   );
 }
 

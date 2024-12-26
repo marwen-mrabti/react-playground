@@ -1,10 +1,12 @@
-import dragon1 from "@/assets/images/dragon_1.jpg";
-import dragon2 from "@/assets/images/dragon_2.jpg";
-import dragon3 from "@/assets/images/dragon_3.jpg";
-import dragon4 from "@/assets/images/dragon_4.jpg";
-import dragon5 from "@/assets/images/dragon_5.jpg";
-import dragon6 from "@/assets/images/dragon_6.jpg";
-import dragon7 from "@/assets/images/dragon_7.jpg";
+import {
+  dragon1,
+  dragon2,
+  dragon3,
+  dragon4,
+  dragon5,
+  dragon6,
+  dragon7,
+} from "@/assets";
 
 import { cn } from "@/lib/utils";
 

@@ -2,7 +2,7 @@ export default function ScrollAnimation() {
   return (
     <section
       id="scroll-animation"
-      className="bg-background-secondary container flex w-full [transform:perspective(1000px)] flex-wrap items-center justify-center gap-6 rounded-2xl px-4 pb-20 transform-3d"
+      className="bg-background-secondary isolate container flex w-full [transform:perspective(1000px)] flex-wrap items-center justify-center gap-6 rounded-2xl px-4 pb-20 transform-3d"
     >
       <h1 className="mb-20 w-full animate-pulse text-center text-3xl">
         Scroll to see the animation
